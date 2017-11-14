@@ -1,0 +1,70 @@
+#include <iostream>
+using namespace std;
+
+ //* Definition for singly-linked list.
+ struct ListNode {
+     int val;
+     ListNode *next;
+     ListNode(int x) : val(x), next(nullptr) {}
+ };
+
+class Solution {
+public:
+    ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
+        ListNode * p1 = l1;
+        ListNode * p2 = l2;
+        int flag = 0;
+
+        ListNode * p3 = new ListNode((p1->val + p2->val)%10);
+        ListNode * head = &(*p3);
+        if (p1->val + p2->val >= 10)
+            flag = 1;
+        p1 = p1->next;
+        p2 = p2->next;
+
+        while (p1 != nullptr || p2 != nullptr){
+            int value = (p1 != nullptr?p1->val:0) + (p2 != nullptr?p2->val:0) + flag;
+            p3->next = new ListNode((value)%10);
+            if (value >= 10)
+                flag = 1;
+            else
+                flag = 0;
+
+//            cout << p1->val + p2->val <<endl;
+            p1 = p1 != nullptr?p1->next: nullptr;
+            p2 = p2 != nullptr?p2->next: nullptr;
+            p3 = p3->next;
+        }
+        if (flag == 1)
+            p3->next = new ListNode(1);
+        return head;
+    }
+};
+
+void test(Solution &s){
+    ListNode * p1 = new ListNode(2);
+    ListNode * p2 = new ListNode(5);
+    p1->next = new ListNode(4);
+    p2->next = new ListNode(6);
+    p1->next->next = new ListNode(3);
+    p2->next->next = new ListNode(4);
+
+    ListNode* l = s.addTwoNumbers(p1, p2);
+    while (l != nullptr){      //print the elements
+    cout << l->val << endl;
+    l = l->next;
+    }
+
+}
+
+int main() {
+//    std::cout << "Hello, World!" << std::endl;
+//    ListNode l1(2);
+//    ListNode * p = &l1;
+////    cout << (*p).val << endl;
+//    cout << p->val << endl;
+    Solution s;
+    test(s);
+
+    return 0;
+}
