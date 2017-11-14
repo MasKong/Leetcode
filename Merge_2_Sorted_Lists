@@ -1,0 +1,102 @@
+#include <iostream>
+using namespace std;
+
+//* Definition for singly-linked list.
+struct ListNode {
+    int val;
+    ListNode *next;
+    ListNode(int x) : val(x), next(nullptr) {}
+};
+
+class Solution {
+public:
+    ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
+        ListNode * p = nullptr;
+        while (l1 != nullptr || l2 != nullptr){
+            if (l1 == nullptr || l2 == nullptr) {
+                p = connect(p,(l1 == nullptr ? l2 : l1));
+                return p;
+            }
+            else{
+                if (p == nullptr)
+                    p = merge(l1,l2);
+                else
+                    p = connect(p, merge(l1,l2));
+            }
+            if (l1->val >= l2->val)
+                l2 = l2->next;
+            else
+                l1 = l1->next;
+//            l1 = l1->next;
+//            l2 = l2->next;
+
+        }
+        return p;
+
+    }
+
+    ListNode * merge( ListNode* l1, ListNode* l2){   //merge two elements at a time
+        ListNode * l1_store = l1, * l2_store = l2;  //copy pointer so that assignment would not change the original value
+        ListNode *p = nullptr;
+        if (l1->val <= l2->val){
+//            l1_store->next = l2_store;
+//            l2_store->next = nullptr;
+//            if (p == nullptr)
+            p = new ListNode(l1->val);
+//            p->next = new ListNode(l2->val);
+//            else
+//                p->next = l1_store;
+        }
+        else{
+//            l2_store->next = l1_store;
+//            l1_store->next = nullptr;
+//            if (p == nullptr)
+//            p = l2_store;
+//            else
+//                p->next = l2_store;
+            p = new ListNode(l2->val);
+//            p->next = new ListNode(l1->val);
+
+        }
+        return p;
+    }
+
+    ListNode * connect(ListNode* p, ListNode* p2){    //connect list p with p2
+        if (p== nullptr)                              // remember to test against null pointer each time
+            return p2;
+        ListNode* pointer = p;
+        while (pointer->next != nullptr){
+            pointer = pointer->next;
+        }
+        pointer->next = p2;
+        return p;
+    }
+};
+
+void test(Solution &s){
+    ListNode * p1 = new ListNode(2);
+    ListNode * p2 = new ListNode(1);
+    p1->next = new ListNode(4);
+    p2->next = new ListNode(7);
+    p1->next->next = new ListNode(6);
+    p2->next->next = new ListNode(10);
+
+    ListNode* l = s.mergeTwoLists(p1, p2);
+    while (l != nullptr){      //print the elements
+        cout << l->val << endl;
+        l = l->next;
+    }
+
+}
+
+int main() {
+//    std::cout << "Hello, World!" << std::endl;
+//    ListNode l1(2);
+//    ListNode * p = &l1;
+////    cout << (*p).val << endl;
+//    cout << p->val << endl;
+    Solution s;
+    test(s);
+
+    return 0;
+}
