@@ -1,0 +1,54 @@
+#include <iostream>
+#include <map>
+
+using namespace std;
+class Solution {
+public:
+    int romanToInt(string s) {
+    map<char, int> roman;
+    roman['M'] = 1000;
+    roman['D'] = 500;
+    roman['C'] = 100;
+    roman['L'] = 50;
+    roman['X'] = 10;
+    roman['V'] = 5;
+    roman['I'] = 1;
+        int sum = 0;
+//        cout << s << endl;
+        char *p = &s[0];
+        int flag = 0;
+    while (p-&s[0] < s.size()){
+        int value = roman[*p];
+        if (p+1-&s[0]<s.size() && roman[*p] < roman[*(p+1)]) {    //detect if there is any subtraction. If there is, record it and skip this char.
+            flag = 1;
+            ++p;
+            continue;
+        }
+        if (flag == 1){         
+            value -= roman[*(p-1)];
+
+            flag = 0;
+        }
+        sum += value;
+
+        ++p;
+//        cout << c << endl;
+    }
+        return sum;
+
+
+    }
+};
+
+void test(Solution &s){
+    int sum = s.romanToInt("MCMXCVI");
+    cout << sum << endl;
+}
+
+
+int main() {
+//    std::cout << "Hello, World!" << std::endl;
+    Solution s;
+    test(s);
+    return 0;
+}
