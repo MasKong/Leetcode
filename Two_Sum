@@ -1,0 +1,93 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+/*
+ * Instead of traversing the vector directly, first sort the vector and then find the result
+ * from both front and end would reduce the time complexity to o(n).
+ * when we get the result, we invoke the funtion find_index to find index of the result which
+ * would induce time complexity o(n). leave the time complexity of sort algorithm, the overall time
+ * complexity is o(n).
+ *
+ */
+class Solution {
+public:
+    vector<int> twoSum(vector<int>& nums, int target) {
+        vector<int> r;
+        vector<int> s = nums;
+        sort(s.begin(),s.end());
+        int *p = &s[0];
+        int *end = p + s.size() - 1;
+        int sum = *p + *end;
+//        if (sum == target) {
+//            r.push_back(p-&s[0]);
+//            r.push_back(end-&s[0]);
+//            return r;
+//        }
+        while(p <= end){
+            sum = *p + *end;
+            if (sum<target)
+                ++p;
+            else if (sum > target)
+                --end;
+            else{     //sum == target
+//                if(*p == *end){
+//                    r.push_back(find_index(nums, *p));
+//                    reverse(nums.begin(),nums.end());
+//                    r.push_back(find_index(nums, *end));
+//
+//                }
+//                else {
+//                    r.push_back(find_index(nums, *p));
+//                    r.push_back(nums.size()-find_index(nums, *end)-1);
+//                }
+                r = find_index(nums, *p, *end);
+                break;
+            }
+
+        }
+        return r;
+    }
+
+    vector<int> find_index(vector<int>& nums, int value1, int value2){
+        vector<int> r;
+        int *p = &nums[0];
+//        int *end = p + nums.size() - 1;
+        int loca2 = -1;   //a variable to record index of value2
+        while(*p != value1) {
+            if (*p == value2)
+                loca2 = p - &nums[0];
+            ++p;
+        }
+        r.push_back(p-&nums[0]);
+        if(loca2 == -1) {
+
+            int *end = ++p;
+            while (*end != value2)
+                ++end;
+            r.push_back(end - &nums[0]);
+        }
+        else
+            r.push_back(loca2);
+        sort(r.begin(),r.end());
+        return r;
+
+    }
+};
+
+
+void test(Solution &s){
+    vector<int> t = {2, 7, 11, 15};
+    vector<int> r;
+    int target = 9;
+    r = s.twoSum(t, target);
+    for (int t:r) {
+        cout << t << endl;
+    }
+}
+
+int main() {
+//    std::cout << "Hello, World!" << std::endl;
+    Solution s;
+    test(s);
+    return 0;
+}
