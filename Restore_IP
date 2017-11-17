@@ -1,0 +1,201 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+//class Solution {
+//public:
+//    vector<string> restoreIpAddresses(string s) {
+//        vector<string> result={};
+//        if (s.size() == 12){
+//            if(judge(s.substr(0, 3)) || judge(s.substr(3, 3)) ||judge(s.substr(6, 3)) ||
+//                    judge(s.substr(9, 3)))
+//                return result;
+//            string r = s.substr(0, 3) + "." + s.substr(3, 3) + "." +
+//                    s.substr(6, 3) + "." + s.substr(9, 3);
+//
+//
+//            result.push_back(r);
+//            return result;
+//        }
+//        else if (s.size()<4)
+//            return result;
+//        result = BFS(s);
+//        return result;
+//
+//    }
+//
+//    bool judge(string s){       //judge whether the value of string >= 255
+////        cout << s << endl;
+//        if (s.size() >3)
+//            return true;
+////        if (s.size() >1 && )
+////            return false;
+//        if (s[0] == '0' && s.size() >1)
+//            return true;
+//        int t = stoi(s);
+////        if (t==0 && s.size() > 1)
+////            return false;
+//        return (t>255);
+//    }
+//
+//    bool length_judge(string s, int i, int j, int k=0, int p=0){
+//        return (i+j+k+p == s.size());
+//    }
+//
+//    vector<string> BFS(string s){
+//        vector<string> result;
+//
+//        string ans;
+//
+//        for (int i=1; i <=3 ; ++i) {
+//            string i_s = s.substr(0, i);
+//            if (judge(i_s))
+//                break;
+//            for (int j = 1; j <= 3; ++j) {
+//                if (length_judge(s, i, j))
+//                    break;
+//                string j_s = s.substr(i, j);
+//                if (judge(j_s))
+//                    break;
+//                for (int k = 1; k <= 3; ++k) {
+//                    if (length_judge(s, i, j, k))
+//                        break;
+//                    string k_s = s.substr(i + j, k);
+//                    if (judge(k_s))
+//                        break;
+////                    for (int p = 1; p <= 3; ++p) {
+//                    int p = s.size() - i -j - k;
+//                    if (p > 3)
+//                        continue;
+////                    if (!length_judge(s, i, j, k, p))
+////                            continue;
+//                        string p_s = s.substr(i + j + k, p);
+////                        cout << "P "<< p << endl;
+////                        cout << p_s << endl;
+////                        cout << i_s + "." + j_s + "." + k_s + "." + p_s << endl;
+//                        if (judge(p_s))
+//                            continue;
+////                        if (!length_judge(s, i, j, k, p))
+////                            continue;
+//                        ans = i_s + "." + j_s + "." + k_s + "." + p_s;
+//                        result.push_back(ans);
+//                }
+//            }
+//        }
+//
+//        return result;
+//
+//    }
+//
+//};
+
+class Solution {        //recursive
+public:
+    vector<string> restoreIpAddresses(string s) {
+        vector<string> result={};
+//        if (s.size() == 12){
+//            if(not_valid(s.substr(0, 3)) || not_valid(s.substr(3, 3)) ||not_valid(s.substr(6, 3)) ||
+//               not_valid(s.substr(9, 3)))
+//                return result;
+//            string r = s.substr(0, 3) + "." + s.substr(3, 3) + "." +
+//                       s.substr(6, 3) + "." + s.substr(9, 3);
+//
+//
+//            result.push_back(r);
+//            return result;
+//        }
+//        else if (s.size()<4)
+//            return result;
+        recursive(result, s);
+        return result;
+
+    }
+
+    bool not_valid(string s){       //judge whether the value of string >= 255
+//        cout << s << endl;
+        if (s.empty())
+            return true;
+        if (s.size() >3)
+            return true;
+//        if (s.size() >1 && )
+//            return false;
+        if (s[0] == '0' && s.size() >1)
+            return true;
+        int t = stoi(s);
+//        if (t==0 && s.size() > 1)
+//            return false;
+        return (t>255);
+    }
+
+    void recursive(vector<string> &result, string s, string before = "", int loc = 0, int seg = 0) {
+
+
+//        string ans;
+        if (loc >= s.size() || seg >= 4) {
+            if (seg == 4 && loc == s.size()) {
+                result.push_back(before);
+            }
+            return;
+        }
+        for (int i = 1; i <= 3; i++) {
+            if (!not_valid(s.substr(loc, i))) {
+                string tmp = before + s.substr(loc, i);
+                if (seg < 3) {
+                    tmp += '.';
+                }
+                recursive(result, s, tmp, loc + i, seg + 1);
+            }
+        }
+
+//        for (int i = 1; i <= 3; ++i) {
+//            string i_s = s.substr(loc, i);
+//            if (not_valid(i_s))
+//                break;
+//            ++seg;
+//            if (seg == 4)
+//                before += i_s;
+//            else
+//                before += i_s + ',';
+//            loc += i;
+////            recursive(s,before,)
+////            if (loc == s.size() && seg == 4) {
+////                result.push_back(before);
+////                return;
+////            }
+////            else if (loc > s.size() || seg > 4)
+////                return;
+////            if (loc >= s.size() || seg >= 4) {
+////                if (seg == 4 && loc == s.size()) {
+////                    result.push_back(before);
+////                }
+////                return;
+////        }
+//                recursive(result, s, before, loc, seg);
+//        }
+    }
+
+};
+
+
+void test(Solution &s){
+    vector<string> t = s.restoreIpAddresses("25525511135");
+//    vector<string> t = s.restoreIpAddresses("122532");
+//    vector<string> t = s.restoreIpAddresses("255255117235");
+//    vector<string> t = s.restoreIpAddresses("103574606193");
+//    vector<string> t = s.restoreIpAddresses("010010");
+    for (string i:t)
+        cout << i << endl;
+}
+
+
+int main() {
+//    std::cout << "Hello, World!" << std::endl;
+    Solution s;
+//    string tes= "";
+//    cout << tes.size() << endl;
+    test(s);
+//    int tes = stoi("0000");
+
+//    cout << (stoi("0000") > 255) << endl;
+    return 0;
+}
