@@ -1,0 +1,27 @@
+class Solution {
+public:
+    int reverse(int x) {
+        if (x == INT_MIN)
+            return 0;
+        string r = "";
+        int num;
+
+        long dividend = 100;
+        long abs_x = x>0?x:-x;
+        num = abs_x%10;
+        r += num + '0';
+
+        while (abs_x/dividend != 0){
+            num = (abs_x % dividend) / (dividend / 10);
+            r += num + '0';
+            dividend *= 10;
+        }
+        // The first bit of the integer
+        num = abs_x / (dividend/10);
+        if (num != 0)
+            r += num + '0';
+
+        return x>0?(stol(r)>INT_MAX?0:stol(r)):(-stol(r)<INT_MIN?0:-stol(r));
+
+    }
+};
